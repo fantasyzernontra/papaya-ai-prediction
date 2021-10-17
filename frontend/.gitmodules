@@ -1,0 +1,3 @@
+[submodule "papaya-ai-prediction"]
+	path = papaya-ai-prediction
+	url = https://github.com/fantasyzernontra/papaya-ai-prediction
