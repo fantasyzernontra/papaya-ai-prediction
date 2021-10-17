@@ -1,3 +1,4 @@
+from james_code.ai import *
 from flask import Flask
 
 app = Flask(__name__)
@@ -13,3 +14,13 @@ def postJa():
     return {
         'text': "test"
     }
+
+
+@app.route('/predict')
+def predictFunction():
+    answers = predict()
+    return {"answers": answers}
+
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=5000, debug=True)
