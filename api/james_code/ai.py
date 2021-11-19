@@ -1,6 +1,8 @@
 import tensorflow as tf
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
+from keras.preprocessing.image import img_to_array
 import os
+import cv2
 import numpy as np
 import matplotlib.pyplot as plt
 from keras.models import load_model
@@ -10,31 +12,25 @@ from keras.models import load_model
 dir_path = os.path.dirname(os.path.realpath('kengi-papaya-model.h5'))
 preprocessed = os.path.join(os.getcwd(), 'james_code', 'kengi-papaya-model.h5')
 
-model = load_model(preprocessed)
+classList = ['medium', 'ripe', 'unripe']
 
 # Predicting
 
 
-def predict(sendedPictures):
+def predict(IMG_PATH):
     try:
-        answers = []
+        model = load_model(preprocessed)
+        image = cv2.imread(IMG_PATH)
+        image = cv2.resize(image, (150, 150))
+        image = image.astype("float") / 255.0
+        image = img_to_array(image)
+        image = np.expand_dims(image, axis=0)
 
-        classList = ['medium', 'ripe', 'unripe']
-        base_test = os.path.join(os.getcwd(), 'content', 'raw-data/')
-        # pictures = list(map(lambda x: base_test+x, sendedPictures))
-
-        # for i in pictures:
-        # if(i == base_test+'.DS_Store'):
-        #     continue
-        # img = tf.keras.preprocessing.image.load_img(
-        #     sendedPictures, target_size=(150, 150)
-        # )
-        img_array = tf.keras.preprocessing.image.img_to_array(
-            float(sendedPictures.decode()))
-        img_array = img_array / 255
-        img_array = img_array.reshape(1, 150, 150, 3)
-        predictions = model.predict(img_array)
-        answers.append(classList[np.argmax(predictions[0])])
-        return answers
+        res = model.predict(image)
+        label = np.argmax(res)
+        print("Label", label)
+        labelName = classList[label]
+        print("Label name:", labelName)
+        return labelName
     except Exception as err:
         return err

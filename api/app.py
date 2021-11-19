@@ -7,7 +7,7 @@ import jsonpickle
 app = Flask(__name__)
 
 
-@app.route("/")
+@app.route("/", methods=['GET'])
 def index():
     return "Hi There! We're group 3, named 'Papaya Token'."
 
@@ -22,10 +22,12 @@ def postJa():
 @app.route('/predict',  methods=["POST"])
 def predictFunction():
     try:
-        sendedPictures = request.files['predicted-pictures'].read()
-        answers = predict(sendedPictures)
+        sendedPictures = request.files['predicted-pictures']
+        sendedPictures.save('testja.jpg')
+
+        answers = predict('testja.jpg')
         print('answers', answers)
-        # return {"answers": answers}
+        return {"answers": answers}
     except Exception as err:
         response_msg = jsonpickle.encode({"message": err})
         return Response(response=response_msg, status=400, mimetype="application/json")
