@@ -55,10 +55,12 @@ const ResultTextContainer = styled.div`
 const App = () => {
 	const [files, setFiles] = useState([])
 	const [predictedResults, setPredictedResults] = useState([])
+	const [isPending, setIsPending] = useState(false)
 	const [isSuccess, setIsSuccess] = useState(false)
 	const [isFailed, setIsFailed] = useState(false)
 
 	const onPredict = async () => {
+		setIsPending(true)
 		const form = new FormData()
 		files.forEach((file) => form.append('predicted-pictures', file))
 
@@ -71,9 +73,11 @@ const App = () => {
 			alert('Oops! Something Went Wrong. Please try again. :(')
 			setIsFailed(true)
 			setIsSuccess(true)
+			setIsPending(false)
 		} else if (status === 200) {
-			setPredictedResults((prevState) => [...prevState, ...data])
+			setPredictedResults((prevState) => [...prevState, ...data.answers])
 			setIsSuccess(true)
+			setIsPending(false)
 		}
 	}
 
@@ -93,8 +97,9 @@ const App = () => {
 						cursor: files.length > 0 ? 'pointer' : 'not-allowed',
 					}}
 					size='lg'
+					disabled={isPending}
 				>
-					Predict a Papaya
+					{isPending ? 'Loading...' : 'Predict a Papaya'}
 				</Button>
 			</DropzoneContainer>
 
