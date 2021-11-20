@@ -11,6 +11,7 @@ WORKDIR $APP_HOME
 COPY ./api ./
 
 # Install production dependencies.
+RUN pip install --upgrade pip
 RUN pip install --no-cache-dir -r requirements.txt
 RUN pip install gunicorn
 
