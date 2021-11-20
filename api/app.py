@@ -14,9 +14,7 @@ def index():
 
 @app.route('/post', methods=["POST"])
 def postJa():
-    return {
-        'text': "test"
-    }
+    return "Greeting Krub! We're from POST method."
 
 
 @app.route('/predict',  methods=["POST"])
