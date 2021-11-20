@@ -124,7 +124,7 @@ function AcceptMaxFiles({ files, setFiles }) {
 
       <aside style={thumbsContainer}>
         {thumbs}
-        {acceptedFileItems}
+        {/* {acceptedFileItems} */}
       </aside>
     </section>
   )
