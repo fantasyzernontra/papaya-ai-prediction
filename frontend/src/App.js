@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Button } from 'react-bootstrap'
+import { Alert, Button } from 'react-bootstrap'
 import AcceptMaxFiles from './components/Dropzone'
 import styled from 'styled-components'
 import API from './axios'
@@ -55,6 +55,8 @@ const ResultTextContainer = styled.div`
 const App = () => {
 	const [files, setFiles] = useState([])
 	const [predictedResults, setPredictedResults] = useState([])
+	const [isSuccess, setIsSuccess] = useState(false)
+	const [isFailed, setIsFailed] = useState(false)
 
 	const onPredict = async () => {
 		const form = new FormData()
@@ -66,8 +68,11 @@ const App = () => {
 		})
 		if (status === 400 || status === 500) {
 			alert('Oops! Something Went Wrong. Please try again. :(')
+			setIsFailed(true)
+			setIsSuccess(true)
 		} else if (status === 200) {
 			setPredictedResults((prevState) => [...prevState, ...data])
+			setIsSuccess(true)
 		}
 	}
 
@@ -96,15 +101,22 @@ const App = () => {
 
 			<ResultContainer>
 				<h2 style={{ textDecoration: 'underline', fontWeight: 'bold' }}>Prediction Summary</h2>
-				{files.map((file) => (
-					<ResultChildContainer>
-						<img src={file?.preview} alt={file?.name} width='240' />
-						<ResultTextContainer>
-							<p>Ripeness: </p>
-							<p>Percentage: 50%</p>
-						</ResultTextContainer>
-					</ResultChildContainer>
-				))}
+				{isSuccess &&
+					!isFailed &&
+					files.map((file, idx) => (
+						<ResultChildContainer>
+							<img src={file?.preview} alt={file?.name} width='240' />
+							<ResultTextContainer>
+								<p>Ripeness: {predictedResults[idx]?.labelName}</p>
+								{/* <p>Percentage: 50%</p> */}
+							</ResultTextContainer>
+						</ResultChildContainer>
+					))}
+				{isSuccess && isFailed && (
+					<Alert role={'alert'} variant='danger'>
+						Oops! Something went wrong. Please try again
+					</Alert>
+				)}
 			</ResultContainer>
 		</Wrapper>
 	)
