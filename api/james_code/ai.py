@@ -12,7 +12,7 @@ from keras.models import load_model
 dir_path = os.path.dirname(os.path.realpath('kengi-papaya-model.h5'))
 preprocessed = os.path.join(os.getcwd(), 'james_code', 'kengi-papaya-model.h5')
 
-classList = ['medium', 'ripe', 'unripe']
+classList = ['medium', 'ripe', 'unriped']
 
 # Predicting
 
@@ -31,6 +31,6 @@ def predict(IMG_PATH):
         print("Label", label)
         labelName = classList[label]
         print("Label name:", labelName)
-        return labelName
+        return {"labelName": labelName, "value": float(label)}
     except Exception as err:
         return err
