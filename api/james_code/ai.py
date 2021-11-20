@@ -1,5 +1,4 @@
 import tensorflow as tf
-import tensorflow_cloud as tfc
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 from keras.preprocessing.image import img_to_array
 import os
