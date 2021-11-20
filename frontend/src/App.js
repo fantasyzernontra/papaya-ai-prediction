@@ -63,6 +63,7 @@ const App = () => {
 		files.forEach((file) => form.append('predicted-pictures', file))
 
 		const { data, status } = await API({
+			method: 'POST',
 			url: '/predict',
 			data: form,
 		})
