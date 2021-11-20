@@ -1,0 +1,42 @@
+name: Papaya Genki API Deployment 🚀🌈🚀🌈
+
+on: 
+  push:
+    branches:
+      - master
+    paths:
+      - 'api/**'
+
+env: 
+  PROJECT_ID: ${{ secrets.PROJECT_ID }}
+  APP_NAME: api-papaya-genki
+  
+jobs:
+  Build-And-Deploy:
+    name: Papaya Genki API Deployment 🚀🌈🚀🌈
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout the repository
+        uses: actions/checkout@v1
+
+      - name: Build Docker Image
+        run: 
+          docker build -f ${{ env.FOLDER }}/Dockerfile -t asia.gcr.io/${{ env.PROJECT_ID }}/${{ env.APP_NAME }} .
+
+      - name: Authenticate into Google Cloud Platform
+        uses: google-github-actions/setup-gcloud@master
+        with:
+          service_account_email: ${{ secrets.SERVICE_ACCOUNT_EMAIL }}
+          service_account_key: ${{ secrets.GCLOUD_AUTH }}
+
+      - name: Configure Docker to use Google Cloud Platform
+        run: "gcloud auth configure-docker --quiet"
+
+      - name: Push image to Google Cloud Container Registry
+        run: docker push asia.gcr.io/${{ env.PROJECT_ID }}/${{ env.APP_NAME }}
+
+      - name: Install beta commands and deploy on cloud run
+        run: |
+          gcloud components install beta --quiet
+          gcloud beta run deploy ${{ env.APP_NAME }} --quiet --image asia.gcr.io/${{ env.PROJECT_ID }}/${{ env.APP_NAME }} --project ${{ env.PROJECT_ID }} --region asia-southeast1 --platform managed

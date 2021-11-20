@@ -22,12 +22,14 @@ def postJa():
 @app.route('/predict',  methods=["POST"])
 def predictFunction():
     try:
-        sendedPictures = request.files['predicted-pictures']
-        sendedPictures.save('testja.jpg')
+        answers = []
+        sendedPictures = request.files.getlist('predicted-pictures')
+        for idx, pic in enumerate(sendedPictures):
+            pic.save('pic.jpg')
+            answers.append(predict('pic.jpg'))
 
-        answers = predict('testja.jpg')
-        print('answers', answers)
-        return {"answers": answers}
+        response = jsonpickle.encode({"answers": answers})
+        return Response(response=response, status=200, mimetype="application/json")
     except Exception as err:
         response_msg = jsonpickle.encode({"message": err})
         return Response(response=response_msg, status=400, mimetype="application/json")
