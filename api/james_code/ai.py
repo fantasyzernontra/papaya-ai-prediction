@@ -1,10 +1,6 @@
 import tensorflow as tf
-from tensorflow.keras.preprocessing.image import ImageDataGenerator
-from keras.preprocessing.image import img_to_array
 import os
-import cv2
 import numpy as np
-import matplotlib.pyplot as plt
 from keras.models import load_model
 
 # Prepare Model
@@ -20,17 +16,17 @@ classList = ['medium', 'ripe', 'unriped']
 def predict(IMG_PATH):
     try:
         model = load_model(preprocessed)
-        image = cv2.imread(IMG_PATH)
-        image = cv2.resize(image, (150, 150))
-        image = image.astype("float") / 255.0
-        image = img_to_array(image)
-        image = np.expand_dims(image, axis=0)
+        img = tf.keras.preprocessing.image.load_img(
+        IMG_PATH, target_size=(150, 150)
+        )
+        img_array = tf.keras.preprocessing.image.img_to_array(img)
+        img_array = img_array / 255
+        img_array = img_array.reshape(1,150,150,3)
 
-        res = model.predict(image)
+        res = model.predict(img_array)
         label = np.argmax(res)
-        print("Label", label)
         labelName = classList[label]
-        print("Label name:", labelName)
+        
         return {"labelName": labelName, "value": float(label)}
     except Exception as err:
         return err
