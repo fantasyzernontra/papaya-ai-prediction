@@ -9,8 +9,8 @@ from keras.models import load_model
 
 # Prepare Model
 
-dir_path = os.path.dirname(os.path.realpath('10epoch.h5'))
-preprocessed = os.path.join(os.getcwd(), 'james_code', '10epoch.h5')
+dir_path = os.path.dirname(os.path.realpath('augmentation.h5'))
+preprocessed = os.path.join(os.getcwd(), 'james_code', 'augmentation.h5')
 
 classList = ['medium', 'ripe', 'unriped']
 
