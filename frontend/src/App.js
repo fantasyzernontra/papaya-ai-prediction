@@ -55,6 +55,7 @@ const ResultTextContainer = styled.div`
 const App = () => {
 	const [files, setFiles] = useState([])
 	const [predictedResults, setPredictedResults] = useState([])
+	const [predictedFiles, setPredictedFiles] = useState([])
 	const [isPending, setIsPending] = useState(false)
 	const [isSuccess, setIsSuccess] = useState(false)
 	const [isFailed, setIsFailed] = useState(false)
@@ -69,16 +70,18 @@ const App = () => {
 			url: '/predict',
 			data: form,
 		})
-		if (status === 400 || status === 500 || status === 503) {
-			alert('Oops! Something Went Wrong. Please try again. :(')
-			setIsFailed(true)
+
+		if (data) {
+			if (status === 400 || status === 500 || status === 503) {
+				alert('Oops! Something Went Wrong. Please try again. :(')
+				setIsFailed(true)
+			} else if (status === 200) {
+				setPredictedResults(data.answers)
+				setPredictedFiles(files)
+				setFiles([])
+			}
 			setIsSuccess(true)
 			setIsPending(false)
-		} else if (status === 200) {
-			setPredictedResults(data.answers)
-			setIsSuccess(true)
-			setIsPending(false)
-			setFiles([])
 		}
 	}
 
@@ -108,7 +111,7 @@ const App = () => {
 				<h2 style={{ textDecoration: 'underline', fontWeight: 'bold' }}>Prediction Summary</h2>
 				{isSuccess &&
 					!isFailed &&
-					files.map((file, idx) => (
+					predictedFiles.map((file, idx) => (
 						<ResultChildContainer>
 							<img src={file?.preview} alt={file?.name} width='240' />
 							<ResultTextContainer>
