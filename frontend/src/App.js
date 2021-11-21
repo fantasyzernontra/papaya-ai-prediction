@@ -85,7 +85,7 @@ const App = () => {
 		<Wrapper>
 			<DropzoneContainer>
 				<h1 style={{ textDecoration: 'underline', fontWeight: 'bold' }}>
-					5 files are the maximum number of files you can drop here
+					Papaya Ripeness Prediction
 				</h1>
 				<AcceptMaxFiles files={files} setFiles={setFiles} />
 				<Button
