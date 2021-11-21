@@ -69,24 +69,23 @@ const App = () => {
 			url: '/predict',
 			data: form,
 		})
-		if (status === 400 || status === 500) {
+		if (status === 400 || status === 500 || status === 503) {
 			alert('Oops! Something Went Wrong. Please try again. :(')
 			setIsFailed(true)
 			setIsSuccess(true)
 			setIsPending(false)
 		} else if (status === 200) {
-			setPredictedResults((prevState) => [...prevState, ...data.answers])
+			setPredictedResults(data.answers)
 			setIsSuccess(true)
 			setIsPending(false)
+			setFiles([])
 		}
 	}
 
 	return (
 		<Wrapper>
 			<DropzoneContainer>
-				<h1 style={{ textDecoration: 'underline', fontWeight: 'bold' }}>
-					5 files are the maximum number of files you can drop here
-				</h1>
+				<h1 style={{ textDecoration: 'underline', fontWeight: 'bold' }}>Papaya Ripeness Prediction</h1>
 				<AcceptMaxFiles files={files} setFiles={setFiles} />
 				<Button
 					onClick={() => files.length > 0 && onPredict()}
