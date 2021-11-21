@@ -61,6 +61,7 @@ const App = () => {
 	const [isFailed, setIsFailed] = useState(false)
 
 	const onPredict = async () => {
+		setIsSuccess(false)
 		setIsPending(true)
 		const form = new FormData()
 		files.forEach((file) => form.append('predicted-pictures', file))
@@ -89,7 +90,7 @@ const App = () => {
 		<Wrapper>
 			<DropzoneContainer>
 				<h1 style={{ textDecoration: 'underline', fontWeight: 'bold' }}>Papaya Ripeness Prediction</h1>
-				<AcceptMaxFiles files={files} setFiles={setFiles} />
+				<AcceptMaxFiles files={files} setFiles={setFiles} setPredictedFiles={setPredictedFiles} />
 				<Button
 					onClick={() => files.length > 0 && onPredict()}
 					style={{
@@ -109,11 +110,12 @@ const App = () => {
 
 			<ResultContainer>
 				<h2 style={{ textDecoration: 'underline', fontWeight: 'bold' }}>Prediction Summary</h2>
+				{isPending && <p>Loading...</p>}
 				{isSuccess &&
 					!isFailed &&
 					predictedFiles.map((file, idx) => (
-						<ResultChildContainer>
-							<img src={file?.preview} alt={file?.name} width='240' />
+						<ResultChildContainer key={'preview-predict-' + (idx + 1).toString()}>
+							<img src={URL.createObjectURL(file)} alt={file.name ?? ''} width='240' />
 							<ResultTextContainer>
 								<p>Ripeness: {predictedResults[idx]?.labelName}</p>
 								{/* <p>Percentage: 50%</p> */}
