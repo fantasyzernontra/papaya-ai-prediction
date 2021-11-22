@@ -64,7 +64,7 @@ const img = {
 
 function AcceptMaxFiles({ files, setFiles, setPredictedFiles }) {
 	const { acceptedFiles, fileRejections, getRootProps, getInputProps } = useDropzone({
-		maxFiles: 5,
+		maxFiles: 100,
 		noKeyboard: true,
 		accept: 'image/jpeg, image/png',
 		onDrop: (acceptedFiles) => {
